@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import { errorMiddleware } from "./middleware/error.middleware";
 import actualRoutes from "./routes/actuals.routes";
+import forecastRoutes from "./routes/forecasts.routes";
 
 const app: Application = express();
 
@@ -22,6 +23,7 @@ app.get("/health", (_req, res) => {
 
 // api routes
 app.use("/api/v1/actuals", actualRoutes);
+app.use("/api/v1/forecasts", forecastRoutes);
 
 app.use((_req: Request, res: Response) => {
   res.status(404).json({

@@ -1,4 +1,4 @@
-import { FuelResponse } from "src/types";
+import { FuelResponse, WindResponse } from "src/types";
 
 const API_URL =
   process.env.ELEXON_API_URL ||
@@ -33,6 +33,39 @@ export async function fetchActualData(
     return data;
   } catch (error) {
     console.error("Error fetching actual data from Elexon API:", error);
+    throw error;
+  }
+}
+
+export async function fetchForecastData(
+  startTime: Date,
+  endTime: Date,
+): Promise<WindResponse> {
+  const url = `${API_URL}/WINDFOR/stream`;
+  const params = new URLSearchParams({
+    publishDateTimeFrom: startTime.toISOString(),
+    publishDateTimeTo: endTime.toISOString(),
+  });
+
+  const fullUrl = `${url}?${params.toString()}`;
+
+  console.log("Fetching forecast data from Elexon API:", fullUrl);
+
+  try {
+    const response = await fetch(fullUrl, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = (await response.json()) as WindResponse;
+    return data;
+  } catch (error) {
+    console.error("Error fetching forecast data from Elexon API:", error);
     throw error;
   }
 }

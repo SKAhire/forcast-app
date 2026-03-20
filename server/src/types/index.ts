@@ -1,7 +1,13 @@
 export interface ActualGeneration {
-  startTime: string; // Target time (ISO8601)
-  generation: number; // MW generated
+  startTime: string;
+  generation: number;
   fuelType: "WIND";
+}
+
+export interface ForecastGeneration {
+  startTime: string;
+  publishTime: string;
+  generation: number;
 }
 
 export interface FuelResponse {
