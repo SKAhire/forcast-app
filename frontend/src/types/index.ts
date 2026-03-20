@@ -9,3 +9,16 @@ export interface ChartDataPoint {
   forecast: number | null;
   formattedTime: string;
 }
+
+export interface ActualGeneration {
+  startTime: string;
+  generation: number;
+  fuelType: "WIND";
+}
+
+export interface ForecastGeneration {
+  startTime: string;
+  publishTime: string;
+  generation: number;
+  forecastHorizon: number;
+}

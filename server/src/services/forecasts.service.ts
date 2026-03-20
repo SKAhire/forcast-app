@@ -4,6 +4,7 @@ import { ForecastGeneration } from "../types";
 export async function getForecastsData(
   startTime: Date,
   endTime: Date,
+  horizonHours: number = 4,
 ): Promise<ForecastGeneration[]> {
   const response = await fetchForecastData(startTime, endTime);
 
@@ -16,7 +17,21 @@ export async function getForecastsData(
   const forecastsByTarget = new Map<string, ForecastGeneration[]>();
 
   for (const item of response) {
+    const targetTime = new Date(item.startTime);
+    const publishTime = new Date(item.publishTime);
 
+    const horizonMs = targetTime.getTime() - publishTime.getTime();
+    const horizon = horizonMs / (1000 * 60 * 60);
+
+    if (horizon < 0 || horizon > 48) {
+      continue;
+    }
+    const minPublishTime = new Date(
+      targetTime.getTime() - horizonHours * 60 * 60 * 1000,
+    );
+    if (publishTime > minPublishTime) {
+      continue;
+    }
 
     const key = item.startTime;
     if (!forecastsByTarget.has(key)) {

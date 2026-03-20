@@ -1,3 +1,4 @@
+import React from "react";
 import {
   LineChart,
   Line,
@@ -15,9 +16,8 @@ interface GenerationChartProps {
 }
 
 export function GenerationChart({ data }: GenerationChartProps) {
-  console.log(data, "data");
   return (
-    <div className="w-full h-96 bg-red-300 rounded-lg shadow p-4">
+    <div className="w-full h-96 bg-white rounded-lg shadow p-4">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={data}
@@ -41,7 +41,7 @@ export function GenerationChart({ data }: GenerationChartProps) {
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: "#000",
+              backgroundColor: "#fff",
               border: "1px solid #e5e7eb",
               borderRadius: "8px",
             }}
@@ -53,6 +53,16 @@ export function GenerationChart({ data }: GenerationChartProps) {
             name="Actual Generation"
             stroke="#3b82f6"
             strokeWidth={2}
+            dot={false}
+            connectNulls
+          />
+          <Line
+            type="monotone"
+            dataKey="forecast"
+            name="Forecast"
+            stroke="#22c55e"
+            strokeWidth={2}
+            strokeDasharray="5 5"
             dot={false}
             connectNulls
           />

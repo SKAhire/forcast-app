@@ -1,45 +1,103 @@
-import { useEffect, useState } from "react";
-import type { DateRange } from "../types";
-import { fetchActuals } from "../utils/apiClient";
+import { useMemo } from "react";
+import type { ChartDataPoint, DateRange } from "../types";
+import { useActualsData } from "./useActualsData";
+import { useForecastsData } from "./useForecastsData";
+import { formatDateForDisplay } from "../utils/dateUtils";
 
-export function useChartData(dateRange: DateRange) {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+interface UseChartDataNoCacheResult {
+  data: ChartDataPoint[];
+  loading: boolean;
+  error: string | null;
+}
+export function useChartData(
+  dateRange: DateRange,
+  horizonHours: number,
+): UseChartDataNoCacheResult {
+  const {
+    data: actuals,
+    loading: actualsLoading,
+    error: actualsError,
+  } = useActualsData(dateRange.startTime, dateRange.endTime);
 
-  const startTime = new Date(dateRange.startTime);
-  const endTime = new Date(dateRange.endTime);
-  console.log(startTime, "startTime");
-  console.log(endTime, "endTime");
-  useEffect(() => {
-    async function loadData() {
-      console.log("useEffect");
-      setLoading(true);
-      setError(null);
+  const {
+    data: forecasts,
+    loading: forecastsLoading,
+    error: forecastsError,
+  } = useForecastsData(dateRange.startTime, dateRange.endTime, horizonHours);
 
-      try {
-        console.log("handleFetch");
-        const response = fetchActuals(dateRange.startTime, dateRange.endTime);
+  const loading = actualsLoading || forecastsLoading;
+  const error = actualsError || forecastsError;
 
-        const resData = await response;
-        const transformedData = resData.map((item: any) => ({
-          time: item.startTime,
-          actual: item.generation,
-          formattedTime: new Date(item.startTime).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        }));
+  const chartData = useMemo(() => {
+    console.log("[useChartDataNoCache] Processing data:", {
+      actualsCount: actuals.length,
+      forecastsCount: forecasts.length,
+      dateRange: {
+        start: dateRange.startTime.toISOString(),
+        end: dateRange.endTime.toISOString(),
+      },
+    });
 
-        setData(transformedData);
-      } catch (error: any) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+    const actualsMap = new Map<string, number>();
+    actuals.forEach((a) => {
+      actualsMap.set(a.startTime, a.generation);
+    });
+
+    const forecastsMap = new Map<string, number>();
+    forecasts.forEach((f) => {
+      forecastsMap.set(f.startTime, f.generation);
+    });
+
+    const allTimes = new Set([...actualsMap.keys(), ...forecastsMap.keys()]);
+    console.log(
+      "[useChartDataNoCache] Unique times:",
+      Array.from(allTimes).slice(0, 5),
+    );
+
+    const points: ChartDataPoint[] = [];
+
+    allTimes.forEach((time) => {
+      const actual = actualsMap.get(time) ?? null;
+      const forecast = forecastsMap.get(time) ?? null;
+
+      if (actual !== null || forecast !== null) {
+        const date = new Date(time);
+        const formatted = formatDateForDisplay(
+          date,
+          dateRange.startTime,
+          dateRange.endTime,
+        );
+        points.push({
+          time,
+          actual,
+          forecast,
+          formattedTime: formatted,
+        });
       }
-    }
-    loadData();
-  }, [startTime.getTime(), endTime.getTime()]);
+    });
 
-  return { data, loading, error };
+    console.log(
+      "[useChartDataNoCache] First 5 data points:",
+      points.slice(0, 5),
+    );
+
+    // Sort by time
+    points.sort(
+      (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime(),
+    );
+
+    return points;
+  }, [
+    actuals,
+    forecasts,
+    dateRange.startTime.getTime(),
+    dateRange.endTime.getTime(),
+    horizonHours,
+  ]);
+
+  return {
+    data: chartData,
+    loading,
+    error,
+  };
 }

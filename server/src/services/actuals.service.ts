@@ -19,7 +19,7 @@ export async function getActualsData(
     .map((item: any) => {
       console.log("item:", item);
       return {
-        startTime: item.publishTime,
+        startTime: item.startTime,
         generation: item.generation,
         fuelType: "WIND",
       };
