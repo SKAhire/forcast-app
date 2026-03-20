@@ -14,13 +14,15 @@ export async function getActualsData(
   }
   console.log("response length:", response.length);
 
-  const actuals: ActualGeneration[] = response.map((item: any) => {
-    console.log("item:", item);
-    return {
-      startTime: item.publishTime,
-      generation: item.generation,
-      fuelType: "WIND",
-    };
-  });
+  const actuals: ActualGeneration[] = response
+    .filter((item) => item.fuelType === "WIND")
+    .map((item: any) => {
+      console.log("item:", item);
+      return {
+        startTime: item.publishTime,
+        generation: item.generation,
+        fuelType: "WIND",
+      };
+    });
   return actuals;
 }
