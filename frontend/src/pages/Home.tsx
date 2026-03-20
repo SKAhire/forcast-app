@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { DateRange } from "../types/types";
 import { useChartData } from "../hooks/useChartData";
+import DateRangePicker from "../components/Daterangepicker";
 
 export default function HomePage() {
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -14,10 +15,7 @@ export default function HomePage() {
   return (
     <div>
       <h1>Home Page</h1>
-      <p>
-        Date range: {dateRange.startTime.toISOString()} -{" "}
-        {dateRange.endTime.toISOString()}
-      </p>
+      <DateRangePicker value={dateRange} onChange={setDateRange} />
       <p>Loading: {loading ? "true" : "false"}</p>
       {/* <p>Data: {JSON.stringify(data)}</p> */}
       <p>Data length: {loading ? 0 : data?.length}</p>
