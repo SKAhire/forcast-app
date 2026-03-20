@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { DateRange } from "../types/types";
+import type { DateRange } from "../types";
 import { fetchActuals } from "../utils/apiClient";
 
 export function useChartData(dateRange: DateRange) {
@@ -22,7 +22,16 @@ export function useChartData(dateRange: DateRange) {
         const response = fetchActuals(dateRange.startTime, dateRange.endTime);
 
         const resData = await response;
-        setData(resData);
+        const transformedData = resData.map((item: any) => ({
+          time: item.startTime,
+          actual: item.generation,
+          formattedTime: new Date(item.startTime).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        }));
+
+        setData(transformedData);
       } catch (error: any) {
         setError(error.message);
       } finally {

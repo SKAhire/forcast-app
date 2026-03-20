@@ -1,4 +1,4 @@
-import { FuelResponse } from "src/types/types";
+import { FuelResponse } from "src/types";
 
 const API_URL =
   process.env.ELEXON_API_URL ||

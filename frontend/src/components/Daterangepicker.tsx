@@ -1,4 +1,4 @@
-import type { DateRange } from "../types/types";
+import type { DateRange } from "../types";
 
 // datetime-local inputs operate on "YYYY-MM-DDTHH:mm" strings.
 // These two helpers are the only place that format is ever touched —

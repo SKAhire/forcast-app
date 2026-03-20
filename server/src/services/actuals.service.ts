@@ -1,5 +1,5 @@
 import { fetchActualData } from "../lib/elexon.client";
-import { ActualGeneration } from "../types/types";
+import { ActualGeneration } from "../types";
 
 export async function getActualsData(
   startTime: Date,
