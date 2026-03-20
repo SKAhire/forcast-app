@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import { errorMiddleware } from "./middleware/error.middleware";
+import actualRoutes from "./routes/actuals.routes";
 
 const app: Application = express();
 
@@ -18,6 +19,9 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.get("/health", (_req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
+
+// api routes
+app.use("/api/v1/actuals", actualRoutes);
 
 app.use((_req: Request, res: Response) => {
   res.status(404).json({
