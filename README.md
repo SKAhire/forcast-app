@@ -1,10 +1,10 @@
-# Forcast — UK Wind Generation Forecast Monitor
+# Forcast - Energy Generation Forecasting Dashboard
 
-A dashboard for visualising actual vs. forecasted wind power generation across the UK national grid, built on live data from the Elexon BMRS API.
+A real-time energy generation forecasting dashboard that visualizes actual and forecasted wind power data from the UK electricity grid using the Elexon BMRS API.
 
 ## Live Project
 
-🔗 **[https://forcast-1gm76a36y-skahires-projects.vercel.app/](https://forcast-1gm76a36y-skahires-projects.vercel.app/)**
+🔗 **Live URL**: [https://forcast-1gm76a36y-skahires-projects.vercel.app/](https://forcast-1gm76a36y-skahires-projects.vercel.app/)
 
 ---
 
@@ -12,57 +12,60 @@ A dashboard for visualising actual vs. forecasted wind power generation across t
 
 ```
 forcast-app/
-├── analysis/
-│   └── forecast_analysis.ipynb        # Forecast error & reliability analysis
+├── analysis/                          # Data analysis notebooks
+│   └── forecast_analysis.ipynb        # Jupyter notebook for forecast analysis
 │
-├── frontend/                          # React application
-│   ├── public/
+├── frontend/                          # React frontend application
+│   ├── public/                        # Static assets
 │   │   ├── favicon.svg
 │   │   └── icons.svg
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── Daterangepicker.tsx
-│   │   │   ├── GenerationChart.tsx
-│   │   │   ├── HorizonSlider.tsx
-│   │   │   └── LoadingSpinner.tsx
-│   │   ├── hooks/
-│   │   │   ├── useActualsData.ts
-│   │   │   ├── useChartData.ts
-│   │   │   └── useForecastsData.ts
-│   │   ├── pages/
-│   │   │   └── Home.tsx
-│   │   ├── types/
+│   │   ├── assets/                    # Images and media
+│   │   ├── components/                # React components
+│   │   │   ├── Daterangepicker.tsx    # Date range selection component
+│   │   │   ├── GenerationChart.tsx    # Main chart component
+│   │   │   ├── HorizonSlider.tsx      # Forecast horizon slider
+│   │   │   └── LoadingSpinner.tsx     # Loading indicator
+│   │   ├── hooks/                     # Custom React hooks
+│   │   │   ├── useActualsData.ts      # Fetch actual generation data
+│   │   │   ├── useChartData.ts        # Process and transform chart data
+│   │   │   └── useForecastsData.ts    # Fetch forecast data
+│   │   ├── pages/                     # Page components
+│   │   │   └── Home.tsx               # Main dashboard page
+│   │   ├── types/                     # TypeScript type definitions
 │   │   │   └── index.ts
-│   │   ├── utils/
-│   │   │   ├── apiClient.ts
-│   │   │   └── dateUtils.ts
-│   │   ├── App.tsx
-│   │   ├── index.css
-│   │   └── main.tsx
-│   ├── .env.example
-│   ├── package.json
-│   ├── vite.config.ts
-│   └── tsconfig.json
+│   │   ├── utils/                     # Utility functions
+│   │   │   ├── apiClient.ts           # API client configuration
+│   │   │   └── dateUtils.ts           # Date manipulation utilities
+│   │   ├── App.tsx                    # Root App component
+│   │   ├── index.css                  # Global styles
+│   │   └── main.tsx                   # Application entry point
+│   ├── .env                           # Environment variables
+│   ├── .env.example                   # Environment variables template
+│   ├── package.json                   # Frontend dependencies
+│   ├── vite.config.ts                 # Vite configuration
+│   └── tsconfig.json                  # TypeScript configuration
 │
-├── server/                            # Express API
+├── server/                            # Express backend API
 │   ├── src/
-│   │   ├── controllers/
-│   │   │   ├── actuals.controller.ts
+│   │   ├── controllers/               # Request handlers
+│   │   │   ├── actuals.controller.ts  # Actuals data controller
 │   │   │   └── forecasts.controller.ts
-│   │   ├── lib/
-│   │   │   └── elexon.client.ts
-│   │   ├── middleware/
-│   │   │   └── error.middleware.ts
-│   │   ├── routes/
+│   │   ├── lib/                       # Third-party integrations
+│   │   │   └── elexon.client.ts       # Elexon API client
+│   │   ├── middleware/                # Express middleware
+│   │   │   └── error.middleware.ts    # Error handling middleware
+│   │   ├── routes/                    # API route definitions
 │   │   │   ├── actuals.routes.ts
 │   │   │   └── forecasts.routes.ts
-│   │   ├── services/
+│   │   ├── services/                  # Business logic
 │   │   │   ├── actuals.service.ts
 │   │   │   └── forecasts.service.ts
-│   │   ├── types/
+│   │   ├── types/                     # TypeScript type definitions
 │   │   │   └── index.ts
-│   │   ├── app.ts
-│   │   └── index.ts
+│   │   ├── app.ts                     # Express app configuration
+│   │   └── index.ts                   # Server entry point
+│   ├── .env
 │   ├── .env.example
 │   ├── package.json
 │   └── tsconfig.json
@@ -74,105 +77,129 @@ forcast-app/
 
 ## Tech Stack
 
-| Layer     | Technology         | Reason                                                                 |
-|-----------|--------------------|------------------------------------------------------------------------|
-| Frontend  | React 19 + Vite    | Component model suits a dashboard with independent, stateful controls  |
-| Styling   | Tailwind CSS 4     | Utility-first; no context switching between CSS files and components   |
-| Charts    | Recharts           | Composable React-native chart primitives; no canvas API overhead       |
-| Dates     | date-fns           | Tree-shakeable, immutable, no prototype pollution                      |
-| Backend   | Node.js + Express 5| Non-blocking I/O fits the workload — proxying external API calls       |
-| Language  | TypeScript         | Shared type contracts between frontend and backend prevent data-shape bugs at the boundary |
+### Frontend
+
+- **React 19** — UI framework
+- **TypeScript** — Type safety
+- **Vite** — Build tool
+- **Tailwind CSS 4** — Styling
+- **Recharts** — Data visualization
+- **date-fns** — Date manipulation
+
+### Backend
+
+- **Express 5** — Web framework
+- **TypeScript** — Type safety
+- **Elexon BMRS API** — UK energy data source
 
 ---
 
-## Architectural Decisions
+## Why React + Node.js?
 
-### Why a separate backend instead of calling Elexon directly from the browser?
+Node.js is well-suited for handling backend data logic like this — it's straightforward to scale (e.g. adding a load balancer), and critically, it gives us a proper server layer where caching can be introduced. For a data-heavy project that repeatedly fetches the same time-series windows, having a backend that can sit between the client and the upstream API is important.
 
-The Elexon BMRS API is a public API with no authentication, so technically you could call it directly from the frontend. There are two reasons not to:
+The tradeoff is that we now have two separate services to host and maintain — two directories, two deployment instances, two sets of environment variables.
 
-1. **Caching.** Historical energy data doesn't change — a query for January 2025 actuals will return the same result today as it will in six months. Without a server layer, every page load or date range change results in a fresh upstream call. The backend implements in-memory caching (keyed by date range) so repeated queries for the same window are served instantly without hitting Elexon.
+**What could be improved:**
 
-2. **Data shaping.** The FUELHH endpoint returns every fuel type (coal, gas, nuclear, biomass, wind, etc.) in a single response. Filtering to `fuelType === "WIND"` and stripping irrelevant fields on the server means the frontend receives only what it needs, keeping payloads small.
-
-### Why is the forecast horizon filter on the frontend, not the backend?
-
-The horizon slider is a UI control — it changes how the same underlying data is presented, not what data is fetched. For any given date window, the backend returns all forecasts in the 0–48hr horizon band. The client then applies the horizon constraint locally:
-
-```
-show the latest forecast for each target time where:
-  targetTime - publishTime >= selectedHorizonHours
-```
-
-If the horizon filter lived on the backend, every slider movement would trigger a new network round-trip for data that's already in the client. Keeping it on the frontend means the slider is instant.
-
-### Why React + Node rather than a full-stack framework (Next.js)?
-
-A full-stack framework would eliminate the two-deployment overhead, but it would also make the caching layer harder to reason about — server components, ISR, and route caching all interact in non-obvious ways for a data-heavy use case like this. Keeping the backend as an explicit Express service means the cache behaviour is straightforward and easy to inspect or replace.
-
-The trade-off is two deployments to manage (Vercel for the frontend, Render for the backend). That's an acceptable cost for this scale.
+- **Caching** — currently the server fetches fresh data from Elexon on every request. Since historical data doesn't change, this is unnecessary. The right approach would be to cache past time windows (e.g. with Redis) indefinitely, and cache recent data with a short expiry (e.g. 2 minutes) so it refreshes without hammering the API on every interaction.
+- **Smarter fetching** — right now both actuals and forecasts are fetched simultaneously on every load. A better UX would let the user explicitly request forecast data separately, reducing unnecessary API calls.
+- **Quick-select filters** — the date picker requires manual input. Adding presets like "Last 3 days", "Last week", "Last month" would make the tool significantly more usable without any backend changes.
 
 ---
 
-## Data Sources
+## About Elexon & the Data
 
-Both APIs are publicly available from [Elexon BMRS](https://bmrs.elexon.co.uk/api-documentation). Elexon operates the UK's Balancing and Settlement Code (BSC) system — they're the body responsible for reconciling how much electricity each generator produced against what was contracted, and settling the difference financially. The data they publish reflects real grid activity.
+Elexon is part of the UK electricity market infrastructure. They run the Balancing and Settlement Code (BSC) system, which is responsible for reconciling how much electricity each generator actually produced versus what was contracted, and settling the financial difference.
 
-### Actual generation — `FUELHH`
+The data they publish via the BMRS API reflects real grid activity. This project uses two of their public endpoints (no API key required):
+
+### Actuals — `FUELHH`
 
 ```
-GET /datasets/FUELHH/stream
-    ?publishDateTimeFrom=2025-01-01T00:00:00Z
-    &publishDateTimeTo=2025-01-02T00:00:00Z
+GET https://data.elexon.co.uk/bmrs/api/v1/datasets/FUELHH/stream
+    ?publishDateTimeFrom=2024-01-01T00:00:00Z
+    &publishDateTimeTo=2024-01-02T00:00:00Z
 ```
 
-Returns half-hourly actual generation figures for every fuel type on the grid. We use:
+Example response record:
 
-- `startTime` — the start of the 30-minute settlement window this reading covers
-- `generation` — MW generated during that window
-- `fuelType` — filtered to `"WIND"` only
+```json
+{
+  "dataset": "FUELHH",
+  "publishTime": "2025-05-01T02:00:00Z",
+  "startTime": "2025-05-01T01:30:00Z",
+  "settlementDate": "2025-05-01",
+  "settlementPeriod": 6,
+  "fuelType": "WIND",
+  "generation": 2834
+}
+```
 
-`settlementDate` and `settlementPeriod` are the market's legacy identifiers for the same window (period 1 = 00:00–00:30, period 48 = 23:30–00:00). `startTime` is the ISO equivalent and is what we use.
+Fields used: `startTime`, `generation`, `fuelType` (filtered to `WIND` only).
+
+`startTime` is the beginning of the 30-minute settlement window the reading covers. This is what we plot on the x-axis.
 
 ### Forecasts — `WINDFOR`
 
 ```
-GET /datasets/WINDFOR/stream
-    ?publishDateTimeFrom=2025-01-01T00:00:00Z
-    &publishDateTimeTo=2025-01-02T00:00:00Z
+GET https://data.elexon.co.uk/bmrs/api/v1/datasets/WINDFOR/stream
+    ?publishDateTimeFrom=2024-01-01T00:00:00Z
+    &publishDateTimeTo=2024-01-02T00:00:00Z
 ```
 
-Returns wind generation forecasts. We use:
+Example response record:
 
-- `startTime` — the target time this forecast is predicting generation for
-- `publishTime` — when this forecast was created
-- `generation` — the forecasted MW value
+```json
+{
+  "dataset": "WINDFOR",
+  "publishTime": "2025-05-01T05:30:00Z",
+  "startTime": "2025-04-30T20:00:00Z",
+  "generation": 5154
+}
+```
 
-The difference `startTime - publishTime` is the forecast horizon. A record where `startTime` is `2025-01-01T18:00Z` and `publishTime` is `2025-01-01T14:00Z` represents a 4-hour-ahead forecast.
+Fields used: `startTime`, `publishTime`, `generation`.
 
-We apply two filters on ingest:
-- Only records where `startTime >= 2025-01-01` (per the assignment spec)
-- Only records where the horizon is between 0 and 48 hours
+### Forecast Horizon
+
+The horizon is the time difference between when a forecast was published and the target time it predicts:
+
+```
+horizon = startTime - publishTime
+```
+
+For example: a forecast for 18:00 published at 14:00 has a 4-hour horizon. The dashboard exposes this as a slider (0–48 hours, default 4 hours). For each target time, we show the latest forecast whose horizon is at least the selected value — i.e. the most recent forecast that was still published at least N hours before the target.
+
+> **Note:** There are parts of the Elexon data model (e.g. settlement period mapping, how WINDFOR forecasts are versioned) that aren't fully clear from the documentation alone. The implementation is based on observed API behaviour and may not be correct in all edge cases.
+
+---
+
+## Prerequisites
+
+- **Node.js** v18 or higher
+- **npm**
 
 ---
 
 ## Setup Instructions
 
-### Prerequisites
+### 1. Clone the Repository
 
-- Node.js v18+
-- npm
+```bash
+git clone <repository-url>
+cd forcast-app
+```
 
-### Backend
+### 2. Backend Setup
 
 ```bash
 cd server
 npm install
 cp .env.example .env
-npm run dev       # starts on http://localhost:3000
 ```
 
-`.env` values:
+Edit `server/.env`:
 
 ```env
 PORT=3000
@@ -181,57 +208,97 @@ CLIENT_URL=http://localhost:5173
 ELEXON_API_URL=https://data.elexon.co.uk/bmrs/api/v1/datasets
 ```
 
-### Frontend
+Start the server:
+
+```bash
+npm run dev
+```
+
+The server runs on `http://localhost:3000`.
+
+### 3. Frontend Setup
 
 ```bash
 cd frontend
 npm install
 cp .env.example .env
-npm run dev       # starts on http://localhost:5173
 ```
 
-`.env` values:
+Edit `frontend/.env`:
 
 ```env
 VITE_API_URL=http://localhost:3000/api/v1
+```
+
+Start the frontend:
+
+```bash
+npm run dev
+```
+
+The frontend runs on `http://localhost:5173`.
+
+### Running Both Together
+
+You'll need two terminal windows:
+
+```bash
+# Terminal 1
+cd server && npm run dev
+
+# Terminal 2
+cd frontend && npm run dev
 ```
 
 ---
 
 ## API Endpoints
 
-| Method | Endpoint              | Query params         | Description                    |
-|--------|-----------------------|----------------------|--------------------------------|
-| GET    | `/api/v1/actuals`     | `from`, `to` (ISO)   | Actual wind generation         |
-| GET    | `/api/v1/forecasts`   | `from`, `to` (ISO)   | Raw forecasts for the window   |
+| Method | Endpoint            | Description                  |
+| ------ | ------------------- | ---------------------------- |
+| GET    | `/api/v1/actuals`   | Fetch actual generation data |
+| GET    | `/api/v1/forecasts` | Fetch forecast data          |
+
+Both endpoints accept:
+
+- `from` — start datetime (ISO 8601)
+- `to` — end datetime (ISO 8601)
+
+Example:
+
+```
+GET /api/v1/actuals?from=2025-01-01T00:00:00Z&to=2025-01-07T00:00:00Z
+```
 
 ---
 
-## Known Limitations & What I Would Improve
+## Features
 
-### Replace in-memory cache with Redis
-
-The current cache uses `node-cache`, which is process-bound. In a multi-instance deployment, each process maintains its own cache — meaning a load balancer distributing traffic across two instances halves the cache hit rate and doubles upstream API calls. Redis would give a single shared cache across all instances, which is the correct solution at any meaningful scale.
-
-### Smarter cache TTL strategy
-
-Right now all responses share a single TTL. Historical data (anything more than a few hours old) never changes and could be cached indefinitely. Recent data (last 1–2 hours) changes as actuals are published. A two-tier TTL — long for historical windows, short for recent ones — would reduce unnecessary upstream calls while keeping live data fresh.
-
-### Lazy forecast fetching
-
-Both actuals and forecasts are fetched on every page load. A user might only want to see actuals for a date range without the overlay. Adding an explicit toggle would halve the number of API calls in the common case.
-
-### Preset date range shortcuts
-
-Manually entering start and end times is friction. Shortcuts like "Last 24h", "Last 7 days", "Last 30 days" would cover the majority of use cases and make the tool significantly faster to use in practice.
+- 📊 **Interactive chart** — actual vs forecasted wind generation overlaid on the same axis
+- 📅 **Date range picker** — custom start and end time selection
+- 🎚️ **Horizon slider** — adjustable forecast horizon from 0 to 48 hours
+- 📱 **Responsive** — works on desktop and mobile
 
 ---
 
-## AI Tools Used
+## Deployment
 
-This project was built with assistance from Claude (Anthropic) for:
-- Initial project scaffolding
-- Component skeleton for the date range picker and horizon slider
-- Jupyter notebook structure
+### Frontend → Vercel
 
-All core logic — forecast horizon filtering, data alignment, chart implementation, analysis reasoning, and architectural decisions — was written independently.
+Deployed at: **https://forcast-1gm76a36y-skahires-projects.vercel.app/**
+
+### Backend
+
+Can be deployed to Render, Railway, or similar Node-compatible platforms. Set `VITE_API_URL` in the frontend environment to point to the deployed backend URL.
+
+---
+
+## AI Usage
+
+AI tools (Claude) were used to assist with:
+
+- Project scaffolding and folder structure
+- Boilerplate code (Express setup, middleware, component templates)
+- Styling and design feedback
+
+All core logic — forecast horizon filtering, data alignment, chart implementation, and the analysis notebook — was written independently.
