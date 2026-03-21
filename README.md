@@ -187,7 +187,7 @@ For example: a forecast for 18:00 published at 14:00 has a 4-hour horizon. The d
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/SKAhire/forcast-app.git
 cd forcast-app
 ```
 
